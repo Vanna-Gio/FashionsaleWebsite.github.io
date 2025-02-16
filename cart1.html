@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+   
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
+        body {
+            font-family: "Fjalla One", serif;
+            margin: 0;
+            background-color: #222;
+            color: #eee;
+        }
+        .container {
+            width: 900px;
+            max-width: 90vw;
+            margin: auto;
+            text-align: center;
+            padding-top: 10px;
+            transition: transform 0.5s;
+        }
+        svg {
+            width: 30px;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 0;
+        }
+        header .icon-cart {
+            position: relative;
+            cursor: pointer;
+        }
+        header .icon-cart span {
+            display: flex;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: -10px;
+            right: -15px;
+            font-size: 14px;
+        }
+        .listProduct {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .listProduct .item {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #eee;
+        }
+        .listProduct .item img {
+            width: 90%;
+            filter: drop-shadow(0 5px 10px #0009);
+        }
+        .listProduct .item h2 {
+            font-weight: 500;
+            font-size: large;
+            margin: 10px 0;
+        }
+        .listProduct .item .price {
+            letter-spacing: 2px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .listProduct .item button {
+            background-color: #E8bc0e;
+            color: #222;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .cartTab {
+            width: 400px;
+            background-color: #353432;
+            color: #eee;
+            position: fixed;
+            margin-top: 70px ;
+            right: 0;
+            bottom: 0;
+            inset: 0 -400px 0 auto;
+            display: grid;
+            grid-template-rows: 70px 1fr 70px;
+            transition: 0.5s;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+        @media (max-width: 768px) {
+            .cartTab {
+                width: 300px;
+            }
+        }
+        body.showCart .cartTab {
+            inset: 0 0 0 auto;
+        }
+        body.showCart .container {
+            transform: translateX(-250px);
+        }
+        .cartTab h1 {
+            font-size: 35px;
+            padding: 5px;
+            margin: 0;
+            font-weight: 300;
+            border-bottom: 1px solid #555;
+            text-align: center;
+        }
+        .cartTab .listCart {
+            overflow: auto;
+            padding: 10px;
+        }
+        .cartTab .listCart .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+        }
+        .cartTab .listCart .item img {
+            width: 50px;
+            height: auto;
+            border-radius: 5px;
+        }
+        .cartTab .listCart .details {
+            flex: 1;
+            margin: 0 10px;
+            text-align: left;
+        }
+        .cartTab .listCart .quantity {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .cartTab .listCart .quantity span {
+            background-color: #eee;
+            color: #222;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .cartTab .listCart .quantity .value {
+            color: #eee;
+        }
+        .cartTab .btn {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            padding: 10px;
+        }
+        .cartTab .btn button {
+            background-color: #E8bc0e;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .cartTab .btn .close {
+            background-color: #444;
+            color: #eee;
+        }
+        .listCart::-webkit-scrollbar {
+            width: 5px;
+        }
+        .listCart::-webkit-scrollbar-thumb {
+            background-color: #555;
+            border-radius: 10px;
+        }
+        .listCart .quantity span{
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background-color: #eee;
+            color: #555;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .listCart .quantity span:nth-child(2){
+            background-color: transparent;
+            color: #eee;
+
+
+        }
+    </style>
+</head>
+<body>
+    <section id="header" >
+        <div class="logo">Fashion<span>Sale</span></div>
+        <div>
+            <ul id="navbar">
+                <li><a class="active" href="home.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag" ><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+                <li id="lg-bag" class="toggle"><a href="mood.html"><i class="fa-solid fa-moon"></i></a></li>
+                <button id="close"><i class="far fa-times" ></i></button>
+            </ul>
+           
+        </div>
+        <div id="mobile">
+            <a href="cart.html" ><i class="fas fa-shopping-cart"></i></a>
+            <a class="active" href="login.html"><i class="fas fa-user"></i></a>
+            <i id="bar" class="fas fa-bars"></i>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+        <header>
+            <div class="title">PRODUCT LIST</div>
+            <div class="icon-cart" aria-label="Shopping cart">
+                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                </svg>
+                <span>0</span>
+            </div>
+        </header>
+        <div class="listProduct">
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1666663844db006b76025e36398f6a7ce4b162eb46_thumbnail_750x__75421.jpg?v=1695391707&width=823" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1665892501f1b2a375f3daf3de84fc9052b1b235cb_thumbnail_750x__43574.jpg?v=1695470411&width=600" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1652424482dd999e8958febdcb6173443d20556b0c_thumbnail_750x-_1__11766.jpg?v=1695299098&width=600" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1665890678c6175ad52e17d78f425b1d870a6a8772_thumbnail_750x__47521.jpg?v=1695391199&width=600" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1670665386b8e8c173b2469da25f9c2fcda533095e_thumbnail_750x__05728.jpg?v=1695386257&width=600" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/Screenshot-2023-09-27-16-34-15-44_40deb401b9ffe8e1df2f1cc5ba480b12.jpg?v=1695937929&width=600" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+           
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/16509380790b06f855675e4f6ce48a1f4fd83b995e_thumbnail_405x552__32660.jpg?v=1695131300&width=823" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+            <div class="item">
+                <img src="https://fifthavenue.pk/cdn/shop/files/1666663844db006b76025e36398f6a7ce4b162eb46_thumbnail_750x__75421.jpg?v=1695391707&width=823" alt="">
+                <h2>NAME PRODUCT</h2>
+                <div class="price">$200</div>
+                <button class="addCart">Add To Cart</button>
+            </div>
+        </div>
+    </div> 
+    </section>
+   <section>
+    <div class="cartTab">
+        <h1>Shopping Cart</h1>
+        <div class="listCart">
+            <!-- Items will be dynamically added here -->
+        </div>
+        <div class="btn">
+            <button class="close">Close</button>
+            <button class="checkOut">CHECK OUT</button>
+        </div>
+    </div>
+   </section>
+    
+    <script>
+        const iconCart = document.querySelector('.icon-cart');
+        const body = document.querySelector('body');
+        const cartList = document.querySelector('.listCart');
+        const cartCount = document.querySelector('.icon-cart span');
+        const closeButton = document.querySelector('.close');
+
+
+        let cart = [];
+
+
+        iconCart.addEventListener('click', () => {
+            body.classList.toggle('showCart');
+        });
+
+
+        closeButton.addEventListener('click', () => {
+            body.classList.remove('showCart');
+        });
+
+
+        document.querySelectorAll('.addCart').forEach((button, index) => {
+            button.addEventListener('click', () => {
+                const item = {
+                    name: `Product ${index + 1}`,
+                    price: 200,
+                    quantity: 1
+                };
+                addToCart(item);
+            });
+        });
+
+
+        function addToCart(item) {
+            const existingItem = cart.find(cartItem => cartItem.name === item.name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(item);
+            }
+            updateCart();
+        }
+
+
+        function updateCart() {
+            cartList.innerHTML = '';
+            cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+            cart.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                   
+                    <div class="details">
+                        <div class="name">${item.name}</div>
+                        <div class="totalPrice">$${item.price * item.quantity}</div>
+                    </div>
+                    <div class="quantity">
+                        <span class="minus">-</span>
+                        <span class="value">${item.quantity}</span>
+                        <span class="plus">+</span>
+                    </div>
+                `;
+
+
+                div.querySelector('.minus').addEventListener('click', () => {
+                    item.quantity--;
+                    if (item.quantity <= 0) {
+                        cart = cart.filter(cartItem => cartItem !== item);
+                    }
+                    updateCart();
+                });
+
+
+                div.querySelector('.plus').addEventListener('click', () => {
+                    item.quantity++;
+                    updateCart();
+                });
+
+
+                cartList.appendChild(div);
+            });
+        }
+    </script>
+    <script>
+        document.querySelectorAll('.addCart').forEach(button => {
+            button.addEventListener('click', event => {
+                const productElement = event.target.closest('.item');
+                const itemName = productElement.querySelector('h2').textContent;
+                const itemPrice = parseFloat(productElement.querySelector('.price').textContent.replace('$', ''));
+   
+                const item = {
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: 1
+                };
+                addToCart(item);
+            });
+        });
+   
+        function addToCart(item) {
+            const existingItem = cart.find(cartItem => cartItem.name === item.name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push(item);
+            }
+            updateCart();
+        }
+    </script>
+   <script src="script.js"></script>
+</body>
+</html>
+
+

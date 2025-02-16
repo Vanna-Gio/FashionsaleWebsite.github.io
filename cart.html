@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+   <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+    <section id="header">
+        <div class="logo">Fashion<span>Sale</span></div>
+        <div>
+            <ul id="navbar">
+                <li><a  href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <div class="box" id="lg-bag">
+                    <input type="text" placeholder="Search....">
+                    <li  ><a href="#"><i class="fas fa-search"></i></a></li>
+                </div>
+                <li id="lg-bag" ><a class="active" href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+                <li id="lg-bag" class="toggle"><a href="login.html"><i class="fas fa-user"></i></a></li>
+                <button id="close"><i class="far fa-times" ></i></button>
+            </ul>
+           
+        </div>
+        <div id="mobile">
+            <a href="cart.html" ><i class="fas fa-shopping-cart"></i></a>
+            <a class="active" href="login.html"><i class="fas fa-user"></i></a>
+            <i id="bar" class="fas fa-bars"></i>
+            
+            
+        </div>
+    </section>
+    <section id="page-header" class="about-header">
+        
+        <h2>#Let's_talk</h2>
+       
+        <p>LEAVE A MESSAGE, We love to hear from you!</p>
+       
+    </section>
+   
+   
+
+   <section class="section-p1" id="cart">
+    <table width="100%">
+        <thead>
+            <tr>
+                <td>Remove</td>
+                <td>Image</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Quantity</td>
+                <td>Subtotal</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                <td><img src="https://images.nexusapp.co/assets/aa/4c/ab/495271993.jpg" alt=""></td>
+                <td>Cartoon Astronaut T-shirt</td>
+                <td>$188.19</td>
+                <td><input type="number" value="1"></td>
+                <td>$188.19</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                <td> <img src="https://images.nexusapp.co/assets/d2/49/9e/107511852.jpg" alt=""></td>
+                <td>Cartoon Astronaut T-shirt</td>
+                <td>$188.19</td>
+                <td><input type="number" value="1"></td>
+                <td>$188.19</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr>
+                <td><a href="#"><i class="far fa-times-circle"></i></a></td>
+                <td><img src="https://images.nexusapp.co/assets/11/d1/2c/268183153.jpg" alt=""></td>
+                <td>Cartoon Astronaut T-shirt</td>
+                <td>$188.19</td>
+                <td><input type="number" value="1"></td>
+                <td>$188.19</td>
+            </tr>
+        </tbody>
+    </table>
+   </section>
+   <section id="cart-add" class="section-p1">
+    <div id="coupon">
+        <h3>Apply Coupon</h3>
+        <div>
+            <input type="text" placeholder="Enter Your Coupon">
+            <button class="normal">Apply</button>
+        </div>
+    </div>
+    <div id="subtotal">
+        <h3>Cart Totals</h3>
+        <table>
+            <tr>
+                <td>Cart Subtotal</td>
+                <td>$ 335</td>
+            </tr>
+            <tr>
+                <td>Shipping</td>
+                <td>Free</td>
+
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>$ 335</strong></td>
+            </tr>
+        </table>
+        <button class="normal">Proceed to checkout</button>
+    </div>
+   </section>
+ 
+
+<script>
+    const iconCart = document.querySelector('.icon-cart');
+    const body = document.querySelector('body');
+    const cartList = document.querySelector('.listCart');
+    const cartCount = document.querySelector('.icon-cart span');
+    const closeButton = document.querySelector('.close');
+
+
+    let cart = [];
+
+
+    iconCart.addEventListener('click', () => {
+        body.classList.toggle('showCart');
+    });
+
+
+    closeButton.addEventListener('click', () => {
+        body.classList.remove('showCart');
+    });
+
+
+    document.querySelectorAll('.addCart').forEach((button, index) => {
+        button.addEventListener('click', () => {
+            const item = {
+                name: `Product ${index + 1}`,
+                price: 200,
+                quantity: 1
+            };
+            addToCart(item);
+        });
+    });
+
+
+    function addToCart(item) {
+        const existingItem = cart.find(cartItem => cartItem.name === item.name);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push(item);
+        }
+        updateCart();
+    }
+
+
+    function updateCart() {
+        cartList.innerHTML = '';
+        cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <img src="image/c1.png" alt="Product Image">
+                <div class="details">
+                    <div class="name">${item.name}</div>
+                    <div class="totalPrice">$${item.price * item.quantity}</div>
+                </div>
+                <div class="quantity">
+                    <span class="minus">-</span>
+                    <span class="value">${item.quantity}</span>
+                    <span class="plus">+</span>
+                </div>
+            `;
+
+
+            div.querySelector('.minus').addEventListener('click', () => {
+                item.quantity--;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem !== item);
+                }
+                updateCart();
+            });
+
+
+            div.querySelector('.plus').addEventListener('click', () => {
+                item.quantity++;
+                updateCart();
+            });
+
+
+            cartList.appendChild(div);
+        });
+    }
+</script>
+<script>
+    document.querySelectorAll('.addCart').forEach(button => {
+        button.addEventListener('click', event => {
+            const productElement = event.target.closest('.item');
+            const itemName = productElement.querySelector('h2').textContent;
+            const itemPrice = parseFloat(productElement.querySelector('.price').textContent.replace('$', ''));
+
+            const item = {
+                name: itemName,
+                price: itemPrice,
+                quantity: 1
+            };
+            addToCart(item);
+        });
+    });
+
+    function addToCart(item) {
+        const existingItem = cart.find(cartItem => cartItem.name === item.name);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push(item);
+        }
+        updateCart();
+    }
+</script>
+<footer class="section-p1">
+    <div class="col">
+        <div class="logo">Fashion<span>Sale</span></div>
+        <h4>Contact</h4>
+        <p><strong>Address: </strong>Phnom Penh</p>
+        <p><strong>Phone: </strong>+885 096290144 / (+885 ) 01 25388 5555 </p>
+        <p><strong>Hours: </strong> 10:00 - 18:00, Mon - Sat</p>
+        <div class="follow">
+            <h4>Follow us</h4>
+            <div class="icon">
+                <i class="fab fa-facebook-f"></i>
+                <i class="fab fa-twitter"></i>
+                <i class="fab fa-instagram"></i>
+                <i class="fab fa-pinterest-p"></i>
+                <i class="fab fa-youtube"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h4>About</h4>
+        <a href="#">About us</a>
+        <a href="#">Delivery Information</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms & Coditions</a>
+        <a href="#">Contact Us</a>
+    </div>
+    <div class="col">
+        <h4>My Account</h4>
+        <a href="#">Sign In</a>
+        <a href="#">View Cart</a>
+        <a href="#">My Wishlist</a>
+        <a href="#">Track My Order</a>
+        <a href="#">Help</a>
+    </div>
+    <div class="col install">
+        <h4>Install App</h4>
+        <p>From App Store or Google Play</p>
+        <div class="row">
+            <a href="/" tabIndex="0"><img class="bn46" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"alt="bn45"/></a>
+            <a href="/" tabIndex="0"><img class="bn46" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png" alt="bn45"/></a>
+        </div>
+        <p>Secured Payment Geteways</p>
+        <img src="image/pay/pay.png" width="300px">
+    </div>
+    <div class="copyrigth">
+        <p>@2025 All rights reserved. Designed by Sovanna Ra.</p>
+    </div>
+</footer>
+    <script src="script.js"></script>
+</body>
+</html>
